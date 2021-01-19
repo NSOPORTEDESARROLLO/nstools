@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+if [ ! -d /run/sshd ];then 
+
+	mkdir -p /run/sshd
+
+fi
+
+
+
+
+
+exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config
