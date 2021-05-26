@@ -8,7 +8,11 @@ if [ ! -d /run/sshd ];then
 fi
 
 
+if [ "$SSHPORT" != "" ];then
 
+	echo "Port $SSHPORT" >> /etc/ssh/sshd_config
+
+fi
 
 
 exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config

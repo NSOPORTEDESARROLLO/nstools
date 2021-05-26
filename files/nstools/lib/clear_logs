@@ -1,0 +1,22 @@
+#Estoy recibiendo un listado de directorios y de archivos
+ClearLogs () {
+
+	#Asterisk
+	rm -rf /host/var/log/asterisk/full-*
+	rm -rf /host/var/log/asterisk/messages-*
+	cat /dev/null > /host/var/log/asterisk/full
+	cat /dev/null >	/host/var/log/asterisk/messages
+	cat /dev/null >	/host/var/log/asterisk/queue_log
+
+	#HTTPD
+	for i in $(ls /host/var/log/httpd);do
+		cat /dev/null > "/host/var/log/httpd/$i"
+	done
+
+	#Dialer
+	rm -rf /host/opt/issabel/dialer/dialerd.log-*
+	cat /dev/null > /host/opt/issabel/dialer/dialerd.log
+	
+
+
+}

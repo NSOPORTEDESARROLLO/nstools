@@ -1,0 +1,8 @@
+ShowLog () {
+
+
+	/usr/sbin/chroot /host tail -f /var/log/$1
+
+
+
+}

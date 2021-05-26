@@ -1,0 +1,10 @@
+#!/bin/bash
+
+AstmanCli () {
+
+
+	/usr/sbin/chroot /host /usr/sbin/asterisk -rx "$1"
+
+
+	
+}

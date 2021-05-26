@@ -1,0 +1,28 @@
+#!/bin/bash
+
+NSTOOLS_PATH="/opt/nstools"
+	. "$NSTOOLS_PATH/lib/astman_cli"
+
+
+
+echo "
+
+"
+echo "Digite el comando CLI o digite r para regresar"
+read CMD
+
+
+if [ "$CMD" = "r" ];then
+	$NSTOOLS_PATH/bin/nstools_start
+fi
+
+
+AstmanCli "$CMD"
+
+$NSTOOLS_PATH/bin/gui_astman_cli
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+NSTOOLS_PATH="/opt/nstools"
+USER=$1
+
+trap "$NSTOOLS_PATH/bin/nstools_start" SIGINT
+clear
+	. /opt/nstools/lib/header
+echo "Seleccione una opcion:
+
+	[1]  -  Modo de depuraciones de Sistema
+	[2]  -  Limpieza de logs
+	[3]  -  Desbloqueo de IP
+	[4]  -  Gestionar Servicios
+	[5]  -  Monitor de Sistema
+	[6]  -  Activar o Cambiar NSID
+	[7]  -  Gestion de FTP
+	[8]  -  Estado de Extension o Troncal
+	[9] -   Ejecutar Comando VOIP CORE
+
+	[s]  -  Salir
+
+"
+
+read OPT
+
+
+case $OPT in 
+
+	1)
+		$NSTOOLS_PATH/bin/gui_debug_tools
+	;;
+
+	2)
+		$NSTOOLS_PATH/bin/gui_logs_tools
+	;;
+
+	4)
+		$NSTOOLS_PATH/bin/gui_services_tools
+	;;
+
+	5) 
+		htop
+	;;
+
+	9)
+		clear
+		$NSTOOLS_PATH/bin/gui_astman_cli
+	;;
+
+	s)
+		killall -u admin 
+
+	;;	
+
+
+	*)
+		echo "Opcion Invalida"
+		$NSTOOLS_PATH/bin/nstools_start
+	;;
+
+esac
+

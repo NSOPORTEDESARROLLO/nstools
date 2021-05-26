@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+
+NSTOOLS_PATH="/opt/nstools"
+
+	. $NSTOOLS_PATH/lib/show_log
+	. $NSTOOLS_PATH/lib/execute_cmd
+	. $NSTOOLS_PATH/lib/service_action
+	
+
+trap "$NSTOOLS_PATH/bin/gui_services_tools" SIGINT
+clear
+	. /opt/nstools/lib/header
+echo "Seleccione el Servicio a Iniciar/Detener/Reiniciar:
+
+	[1]  -  VOIP CORE
+	[2]  -  WEBSERVER
+	[3]  -  Fail2Ban
+	[4]  -  Shorewall
+	[5]  -  Dialer
+	[6]  -  Mysql
+	[r]  -  Regresar
+
+
+"
+
+read OPT
+
+#Opcion de redireccion
+if [ "$OPT" = "r" ];then
+	$NSTOOLS_PATH/bin/nstools_start
+fi
+
+
+echo "Que Accion desea ejecutar:
+
+
+	[1]  - Parar
+	[2]  - Iniciar
+	[3]  - Reiniciar
+	[4]  - Obtener Estado"
+
+
+read ACTION
+
+
+case $OPT in 
+
+	1)
+		ServiceAction "asterisk" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+	;;
+
+	2)
+		ServiceAction "httpd" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+	;;
+
+
+	3)
+		ServiceAction "fail2ban" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+
+	;;
+
+
+	4) 
+		ServiceAction "shorewall" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+	;;
+
+	5)
+		ServiceAction "issabeldialer" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+
+	;;
+
+	6)
+		ServiceAction "mariadb" $ACTION "$NSTOOLS_PATH/bin/gui_services_tools"
+
+	;;
+
+	7)
+		$NSTOOLS_PATH/bin/nstools_start
+	;;
+
+	*)
+		echo "Opcion Invalida"
+		$NSTOOLS_PATH/bin/gui_debug_tools
+	;;
+
+esac

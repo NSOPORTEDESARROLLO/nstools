@@ -1,0 +1,10 @@
+ExecuteCmd () {
+
+
+	/usr/sbin/chroot /host $1
+
+
+
+
+{
+

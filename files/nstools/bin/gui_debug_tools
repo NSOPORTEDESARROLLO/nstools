@@ -1,0 +1,72 @@
+#!/bin/bash
+
+
+
+NSTOOLS_PATH="/opt/nstools"
+
+	. $NSTOOLS_PATH/lib/show_log
+	. $NSTOOLS_PATH/lib/execute_cmd
+
+
+trap "$NSTOOLS_PATH/bin/gui_debug_tools" SIGINT
+clear
+	. /opt/nstools/lib/header
+echo "Seleccione el Log que desea visualizar:
+
+	[1]  -  VOIP CORE
+	[2]  -  WEBSERVER
+	[3]  -  Fail2Ban
+	[4]  -  Shorewall
+	[5]  -  Dialer
+	[6]  -  SysLog
+	[r]  -  Regresar
+
+
+"
+
+read OPT
+
+
+case $OPT in 
+
+	1)
+		ShowLog "asterisk/full"
+	;;
+
+	2)
+		ShowLog "httpd/error_log"
+	;;
+
+
+	3)
+		ShowLog "fail2ban.log"
+
+	;;
+
+
+	4) 
+		ShowLog "shorewall.log"
+	;;
+
+	5)
+		/usr/sbin/chroot /host tail -f /opt/issabel/dialer/dialerd.log
+
+	;;
+
+	6)
+		ShowLog "messages"
+
+	;;
+
+	r)
+		$NSTOOLS_PATH/bin/nstools_start
+	;;
+
+	*)
+		echo "Opcion Invalida"
+		$NSTOOLS_PATH/bin/gui_debug_tools
+	;;
+
+esac
+
+trap "$NSTOOLS_PATH/bin/gui_debug_tools" SIGINT

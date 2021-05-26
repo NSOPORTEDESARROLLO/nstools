@@ -1,0 +1,59 @@
+#!/bin/bash
+
+
+NSTOOLS_PATH="/opt/nstools"
+
+ . $NSTOOLS_PATH/lib/clear_logs
+
+
+clear
+	. /opt/nstools/lib/header
+echo -n "Obteniendo datos ........................"
+
+FOLFILES="/host/var/log/asterisk
+	  /host/var/log/httpd
+	  /host/opt/issabel/dialer
+	  /host/var/log/fail2ban.log"
+
+
+INFO=""
+
+for i in $FOLFILES;do
+
+	W=$(du -sh $i |awk '{print $1}')
+	z=$(echo $i |cut -d '/' -f5)
+
+	INFO="$INFO\n$z---------->$W"	
+	
+
+done
+
+echo "Ok"
+
+printf $INFO
+echo "
+
+¿Desea Realizar una limpieza de los Logs del sistema?
+
+		[1]  - Si
+		[2]  - No
+		[r]  - Regresar
+
+"
+
+read OPT	
+
+case $OPT in
+
+	1)
+		ClearLogs $FOLFILES
+		$NSTOOLS_PATH/bin/gui_logs_tools
+	;;
+
+	*)
+		$NSTOOLS_PATH/bin/nstools_start 
+
+	;;
+
+esac	
+		
