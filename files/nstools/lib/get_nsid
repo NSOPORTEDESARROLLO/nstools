@@ -1,0 +1,12 @@
+#!/bin/bash
+
+GetNSID () {
+
+
+	actual_hostname=$(/usr/sbin/chroot /host cat /etc/hostname)
+
+
+
+
+	
+}

@@ -3,20 +3,21 @@
 NSTOOLS_PATH="/opt/nstools"
 USER=$1
 
-trap "$NSTOOLS_PATH/bin/nstools_start" SIGINT
-clear
+#trap "$NSTOOLS_PATH/bin/nstools_start" SIGINT
+#clear
 	. /opt/nstools/lib/header
 echo "Seleccione una opcion:
 
-	[1]  -  Modo de depuraciones de Sistema
-	[2]  -  Limpieza de logs
-	[3]  -  Desbloqueo de IP
-	[4]  -  Gestionar Servicios
-	[5]  -  Monitor de Sistema
-	[6]  -  Activar o Cambiar NSID
-	[7]  -  Gestion de FTP
-	[8]  -  Estado de Extension o Troncal
-	[9] -   Ejecutar Comando VOIP CORE
+	[1]   -  Modo de depuraciones de Sistema
+	[2]   -  Limpieza de logs
+	[3]   -  Operaciones Fail2Ban
+	[4]   -  Gestionar Servicios
+	[5]   -  Monitor de Sistema
+	[6]   -  Activar o Cambiar NSID
+	[7]   -  Gestion de FTP
+	[8]   -  Estado de Extension o Troncal
+	[9]   -  Ejecutar Comando VOIP CORE
+	[10]  -  Cambiar Hostname
 
 	[s]  -  Salir
 
@@ -43,15 +44,35 @@ case $OPT in
 		htop
 	;;
 
+	7)
+  		$NSTOOLS_PATH/bin/gui_ftp_tools
+  	;;
+
 	9)
 		clear
 		$NSTOOLS_PATH/bin/gui_astman_cli
 	;;
 
+	10)
+		$NSTOOLS_PATH/bin/gui_set_hostname
+	;;
+
 	s)
 		killall -u admin 
 
+	;;
+
+	383838)
+
+		docker restart nstools 
+
 	;;	
+
+	aconsole)
+		
+		/usr/sbin/chroot /host /usr/sbin/asterisk -rvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+	;;
 
 
 	*)

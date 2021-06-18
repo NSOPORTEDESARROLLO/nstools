@@ -1,0 +1,113 @@
+#!/bin/bash
+
+
+NSTOOLS_PATH="/opt/nstools"
+
+	. /opt/nstools/lib/header
+
+
+#Vamos a probar si el contenedor esta instalado y corriendo 
+#Probando si esta corriendo:
+test_run=$(docker ps |grep ftpserver |wc -l)
+test_install=$(docker ps -a|grep ftpserver |wc -l)
+
+
+
+
+if [ $test_run -ne 1 ];then 
+
+	if [ $test_install -eq 1 ];then 
+
+		echo "El servicio FTP esta instalado pero se encuentra detenido. Desea tratar de iniciarlo?"
+
+		echo ""
+		echo "            [1]     -   Si" 
+		echo "            [Enter] -   Regresar"
+
+		read yu
+
+		if [ $yu -eq 1 ];then
+			docker start ftpserver
+		fi
+
+
+		$NSTOOLS_PATH/bin/nstools_start
+										
+
+	else 
+
+		echo "El servicio FTP no se encuentra instalado. Por favor solicitar la activacion"
+		echo "del servicio mediante <soporte@nsoporte.com>"
+
+		echo ""
+		echo ""
+		echo ""
+
+
+		echo "             [Enter]  -  Regresar"
+		
+		read yu
+		$NSTOOLS_PATH/bin/nstools_start
+	fi
+
+fi
+
+
+
+
+
+echo "Herramientas para administracion FTP. Seleccione una opcion:
+
+
+	[1]  -  Agregar Usuario
+	[2]  -  Borrar Usuario
+	[3]  -  Lista de Usuarios
+	[r]  -  Regresar
+
+
+"
+
+read OPT
+
+
+#Opcion de redireccion
+if [ "$OPT" = "r" ];then
+	$NSTOOLS_PATH/bin/nstools_start
+fi
+
+
+case $OPT in 
+
+	1)
+		/usr/bin/docker exec -it ftpserver add_ftp_user
+		$NSTOOLS_PATH/bin/gui_ftp_tools
+	;;
+
+
+	2)
+		/usr/bin/docker exec -it ftpserver del_ftp_user
+		$NSTOOLS_PATH/bin/gui_ftp_tools
+	;;
+
+
+	3)
+		clear
+		/usr/bin/docker exec -it ftpserver list_ftp_users
+		echo ""
+		echo ""
+		echo "Presione Enter para regresar"
+		read r
+		$NSTOOLS_PATH/bin/gui_ftp_tools
+
+
+
+
+	;;
+
+
+	*)
+		echo "Opcion Invalida"
+		$NSTOOLS_PATH/bin/gui_ftp_tools
+	;;
+
+esac

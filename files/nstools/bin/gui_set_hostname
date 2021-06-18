@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+NSTOOLS_PATH="/opt/nstools"
+
+	. /opt/nstools/lib/header
+
+
+actual_hostname=$(/usr/sbin/chroot /host cat /etc/hostname)
+
+echo "El hostname actual es: $actual_hostname"
+echo ""
+echo ""
+
+echo "            [1] -   Cambiar"
+echo "            [r] -   Regresar"
+
+
+read OPT
+
+
+case $OPT in
+
+	r) 
+		$NSTOOLS_PATH/bin/nstools_start
+	;;
+
+
+	1)
+		
+		echo ""
+		echo ""
+		echo "Ingrese el nombre del Host (sin dominio), Ejemplo: pbx, pdc, fw, etc"
+		read HosT
+		echo ""
+		echo "Ingrese el nombre del dominio, Ejemplo: 316cloud.com, nsoporte.com, home.local, etc"
+		read DomaIn
+
+
+		if [[ "$HosT" = "" ]] || [[ "$DomaIn" = "" ]];then
+
+			echo ""
+			echo ""
+			echo "ERROR: Ni el Host ni el Dominio pueden estar en blanco"
+			echo ""
+			echo ""
+			echo "            [Enter] -   Regresar"
+			read kl
+			$NSTOOLS_PATH/bin/gui_set_hostname
+		fi
+
+		HostName="$HosT.$DomaIn"
+		#echo "HostName"
+
+		echo "$HostName" > /host/etc/hostname
+		sed -i "/127.0.0.1/c\127.0.0.1    localhost localhost.localdomain  .localdomain4 $HostName $HosT" /host/etc/hosts
+		sed -i "/::1/c\::1    localhost localhost.localdomain localhost6 localhost6.localdomain6 $HostName $HosT" /host/etc/hosts
+
+		$NSTOOLS_PATH/bin/gui_set_hostname
+
+	;;	
+
+	*)
+		$NSTOOLS_PATH/bin/gui_set_hostname
+
+	;;
+
+
+
+esac
