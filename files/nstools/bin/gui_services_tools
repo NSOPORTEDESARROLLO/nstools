@@ -9,7 +9,7 @@ NSTOOLS_PATH="/opt/nstools"
 	. $NSTOOLS_PATH/lib/service_action
 	
 
-trap "$NSTOOLS_PATH/bin/gui_services_tools" SIGINT
+trap "exec $NSTOOLS_PATH/bin/gui_services_tools" SIGINT
 clear
 	. /opt/nstools/lib/header
 echo "Seleccione el Servicio a Iniciar/Detener/Reiniciar:
@@ -20,6 +20,7 @@ echo "Seleccione el Servicio a Iniciar/Detener/Reiniciar:
 	[4]  -  Shorewall
 	[5]  -  Dialer
 	[6]  -  Mysql
+	
 	[r]  -  Regresar
 
 
@@ -29,7 +30,7 @@ read OPT
 
 #Opcion de redireccion
 if [ "$OPT" = "r" ];then
-	$NSTOOLS_PATH/bin/nstools_start
+	exec $NSTOOLS_PATH/bin/cat_system
 fi
 
 
@@ -77,12 +78,12 @@ case $OPT in
 	;;
 
 	7)
-		$NSTOOLS_PATH/bin/nstools_start
+		exec $NSTOOLS_PATH/bin/cat_system
 	;;
 
 	*)
 		echo "Opcion Invalida"
-		$NSTOOLS_PATH/bin/gui_debug_tools
+		exec $NSTOOLS_PATH/bin/gui_debug_tools
 	;;
 
 esac

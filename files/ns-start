@@ -15,4 +15,6 @@ if [ "$SSHPORT" != "" ];then
 fi
 
 
+
+chmod +x /opt/nstools/bin/*
 exec /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config

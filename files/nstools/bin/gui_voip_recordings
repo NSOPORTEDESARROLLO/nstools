@@ -1,0 +1,67 @@
+#!/bin/bash
+
+NSTOOLS_PATH="/opt/nstools"
+
+trap "exec $NSTOOLS_PATH/bin/gui_voip_recordings" SIGINT
+clear
+	. /opt/nstools/lib/header
+	. /opt/nstools/lib/voip_rec
+
+CRONFILE="/host/etc/cron.d/nspbx_recordings.cron"
+
+
+#Primero me fijo si el archivo para el Cron existe
+
+if [ -f $CRONFILE ];then
+
+	DAYS=$(cat $CRONFILE |cut -d '+' -f2 |awk '{print $1}')
+	echo "RETENCION DE $DAYS DIAS ACTIVADO"
+	echo ""
+	echo "       [1]  -  Desactivar"
+	ONOFF=0
+
+else
+
+	echo "BORRADO DE GRABACIONES DESACTIVADO"
+	echo ""
+	echo "       [1]  -  Activar"
+	ONOFF=1
+
+fi
+
+echo ""
+echo "       [r]  -  Regresar"
+
+read OPT
+
+
+case $OPT in 
+
+	1)
+		if [ $ONOFF -eq 1 ];then
+
+			echo "Numero de dias para retener las grabaciones?"
+			while [ "$RET" = "" ];do
+
+				read RET
+			done
+			VoipRec 1 $CRONFILE $RET
+
+		else
+			VoipRec 0 $CRONFILE
+
+		fi	
+
+		exec $NSTOOLS_PATH/bin/gui_voip_recordings
+
+	;;
+
+	r)
+		exec $NSTOOLS_PATH/bin/cat_voip
+	;;
+
+	*)
+		exec $NSTOOLS_PATH/bin/gui_voip_recordings
+	;;
+
+esac

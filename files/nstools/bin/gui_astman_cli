@@ -4,6 +4,8 @@ NSTOOLS_PATH="/opt/nstools"
 	. "$NSTOOLS_PATH/lib/astman_cli"
 
 
+trap "exec $NSTOOLS_PATH/bin/gui_astman_cli" SIGINT
+
 
 echo "
 
@@ -13,13 +15,13 @@ read CMD
 
 
 if [ "$CMD" = "r" ];then
-	$NSTOOLS_PATH/bin/nstools_start
+	exec $NSTOOLS_PATH/bin/cat_voip
 fi
 
 
 AstmanCli "$CMD"
 
-$NSTOOLS_PATH/bin/gui_astman_cli
+exec $NSTOOLS_PATH/bin/gui_astman_cli
 
 
 

@@ -3,23 +3,17 @@
 NSTOOLS_PATH="/opt/nstools"
 USER=$1
 
-#trap "$NSTOOLS_PATH/bin/nstools_start" SIGINT
+#trap "exec $NSTOOLS_PATH/bin/nstools_start" SIGINT
 #clear
 	. /opt/nstools/lib/header
-echo "Seleccione una opcion:
+echo "NSTOOLS - Seleccione una opcion:
 
-	[1]   -  Modo de depuraciones de Sistema
-	[2]   -  Limpieza de logs
-	[3]   -  Operaciones Fail2Ban
-	[4]   -  Gestionar Servicios
-	[5]   -  Monitor de Sistema
-	[6]   -  Activar o Cambiar NSID
-	[7]   -  Gestion de FTP
-	[8]   -  Estado de Extension o Troncal
-	[9]   -  Ejecutar Comando VOIP CORE
-	[10]  -  Cambiar Hostname
+      [1]   -  Sistema
+      [2]   -  Herramientas de Red
+      [3]   -  Herramientas VOIP
+      [4]   -  Samba4 (Active Directory)
 
-	[s]  -  Salir
+      [s]  -  Salir
 
 "
 
@@ -29,56 +23,38 @@ read OPT
 case $OPT in 
 
 	1)
-		$NSTOOLS_PATH/bin/gui_debug_tools
+		exec $NSTOOLS_PATH/bin/cat_system
 	;;
 
 	2)
-		$NSTOOLS_PATH/bin/gui_logs_tools
+		exec $NSTOOLS_PATH/bin/cat_net
+	;;
+
+	3)
+		exec $NSTOOLS_PATH/bin/cat_voip
 	;;
 
 	4)
-		$NSTOOLS_PATH/bin/gui_services_tools
+		exec $NSTOOLS_PATH/bin/cat_samba4
+
 	;;
 
-	5) 
-		htop
-	;;
-
-	7)
-  		$NSTOOLS_PATH/bin/gui_ftp_tools
-  	;;
-
-	9)
-		clear
-		$NSTOOLS_PATH/bin/gui_astman_cli
-	;;
-
-	10)
-		$NSTOOLS_PATH/bin/gui_set_hostname
-	;;
 
 	s)
 		killall -u admin 
 
 	;;
 
-	383838)
+	3838)
 
-		docker restart nstools 
-
-	;;	
-
-	aconsole)
 		
-		/usr/sbin/chroot /host /usr/sbin/asterisk -rvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
+		exec $NSTOOLS_PATH/bin/cat_nsoporte
 	;;
 
 
 	*)
 		echo "Opcion Invalida"
-		$NSTOOLS_PATH/bin/nstools_start
+		exec $NSTOOLS_PATH/bin/nstools_start
 	;;
 
 esac
-

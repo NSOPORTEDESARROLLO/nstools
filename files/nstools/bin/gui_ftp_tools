@@ -6,6 +6,8 @@ NSTOOLS_PATH="/opt/nstools"
 	. /opt/nstools/lib/header
 
 
+trap "exec $NSTOOLS_PATH/bin/gui_ftp_tools" SIGINT
+
 #Vamos a probar si el contenedor esta instalado y corriendo 
 #Probando si esta corriendo:
 test_run=$(docker ps |grep ftpserver |wc -l)
@@ -28,10 +30,17 @@ if [ $test_run -ne 1 ];then
 
 		if [ $yu -eq 1 ];then
 			docker start ftpserver
+			exec $NSTOOLS_PATH/bin/gui_ftp_tools
+		
+		else
+		
+			exec $NSTOOLS_PATH/bin/cat_voip	
+
+
 		fi
 
 
-		$NSTOOLS_PATH/bin/nstools_start
+		
 										
 
 	else 
@@ -47,7 +56,7 @@ if [ $test_run -ne 1 ];then
 		echo "             [Enter]  -  Regresar"
 		
 		read yu
-		$NSTOOLS_PATH/bin/nstools_start
+		exec $NSTOOLS_PATH/bin/cat_voip
 	fi
 
 fi
@@ -72,7 +81,7 @@ read OPT
 
 #Opcion de redireccion
 if [ "$OPT" = "r" ];then
-	$NSTOOLS_PATH/bin/nstools_start
+	exec $NSTOOLS_PATH/bin/cat_voip
 fi
 
 
@@ -80,13 +89,13 @@ case $OPT in
 
 	1)
 		/usr/bin/docker exec -it ftpserver add_ftp_user
-		$NSTOOLS_PATH/bin/gui_ftp_tools
+		exec $NSTOOLS_PATH/bin/gui_ftp_tools
 	;;
 
 
 	2)
 		/usr/bin/docker exec -it ftpserver del_ftp_user
-		$NSTOOLS_PATH/bin/gui_ftp_tools
+		exec $NSTOOLS_PATH/bin/gui_ftp_tools
 	;;
 
 
@@ -97,7 +106,7 @@ case $OPT in
 		echo ""
 		echo "Presione Enter para regresar"
 		read r
-		$NSTOOLS_PATH/bin/gui_ftp_tools
+		exec $NSTOOLS_PATH/bin/gui_ftp_tools
 
 
 
@@ -107,7 +116,7 @@ case $OPT in
 
 	*)
 		echo "Opcion Invalida"
-		$NSTOOLS_PATH/bin/gui_ftp_tools
+		exec $NSTOOLS_PATH/bin/gui_ftp_tools
 	;;
 
 esac

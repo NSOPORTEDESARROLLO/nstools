@@ -6,6 +6,8 @@ NSTOOLS_PATH="/opt/nstools"
  . $NSTOOLS_PATH/lib/clear_logs
 
 
+
+trap "exec $NSTOOLS_PATH/bin/gui_logs_tools" SIGINT
 clear
 	. /opt/nstools/lib/header
 echo -n "Obteniendo datos ........................"
@@ -37,6 +39,7 @@ echo "
 
 		[1]  - Si
 		[2]  - No
+		
 		[r]  - Regresar
 
 "
@@ -47,11 +50,11 @@ case $OPT in
 
 	1)
 		ClearLogs $FOLFILES
-		$NSTOOLS_PATH/bin/gui_logs_tools
+		exec $NSTOOLS_PATH/bin/gui_logs_tools
 	;;
 
 	*)
-		$NSTOOLS_PATH/bin/nstools_start 
+		exec $NSTOOLS_PATH/bin/cat_system 
 
 	;;
 

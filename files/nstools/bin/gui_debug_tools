@@ -8,10 +8,10 @@ NSTOOLS_PATH="/opt/nstools"
 	. $NSTOOLS_PATH/lib/execute_cmd
 
 
-trap "$NSTOOLS_PATH/bin/gui_debug_tools" SIGINT
+trap "exec $NSTOOLS_PATH/bin/gui_debug_tools" SIGINT
 clear
 	. /opt/nstools/lib/header
-echo "Seleccione el Log que desea visualizar:
+echo "VISUALIZADOR DE LOGS - Seleccione una opcion:
 
 	[1]  -  VOIP CORE
 	[2]  -  WEBSERVER
@@ -19,6 +19,7 @@ echo "Seleccione el Log que desea visualizar:
 	[4]  -  Shorewall
 	[5]  -  Dialer
 	[6]  -  SysLog
+	
 	[r]  -  Regresar
 
 
@@ -59,14 +60,12 @@ case $OPT in
 	;;
 
 	r)
-		$NSTOOLS_PATH/bin/nstools_start
+		exec $NSTOOLS_PATH/bin/cat_system
 	;;
 
 	*)
 		echo "Opcion Invalida"
-		$NSTOOLS_PATH/bin/gui_debug_tools
+		exec $NSTOOLS_PATH/bin/gui_debug_tools
 	;;
 
 esac
-
-trap "$NSTOOLS_PATH/bin/gui_debug_tools" SIGINT

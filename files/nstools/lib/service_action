@@ -45,7 +45,7 @@ ServiceAction () {
 
 	if [ "$RETURN" != "" ];then
 
-		$RETURN
+		exec 3$RETURN
 	fi
 
 }

@@ -5,6 +5,7 @@ NSTOOLS_PATH="/opt/nstools"
 
 	. /opt/nstools/lib/header
 
+trap "exec $NSTOOLS_PATH/bin/gui_set_hostname" SIGINT
 
 actual_hostname=$(/usr/sbin/chroot /host cat /etc/hostname)
 
@@ -22,7 +23,7 @@ read OPT
 case $OPT in
 
 	r) 
-		$NSTOOLS_PATH/bin/nstools_start
+		exec $NSTOOLS_PATH/bin/cat_system
 	;;
 
 
@@ -46,7 +47,7 @@ case $OPT in
 			echo ""
 			echo "            [Enter] -   Regresar"
 			read kl
-			$NSTOOLS_PATH/bin/gui_set_hostname
+			exec $NSTOOLS_PATH/bin/gui_set_hostname
 		fi
 
 		HostName="$HosT.$DomaIn"
@@ -56,12 +57,12 @@ case $OPT in
 		sed -i "/127.0.0.1/c\127.0.0.1    localhost localhost.localdomain  .localdomain4 $HostName $HosT" /host/etc/hosts
 		sed -i "/::1/c\::1    localhost localhost.localdomain localhost6 localhost6.localdomain6 $HostName $HosT" /host/etc/hosts
 
-		$NSTOOLS_PATH/bin/gui_set_hostname
+		exec $NSTOOLS_PATH/bin/gui_set_hostname
 
 	;;	
 
 	*)
-		$NSTOOLS_PATH/bin/gui_set_hostname
+		exec $NSTOOLS_PATH/bin/gui_set_hostname
 
 	;;
 

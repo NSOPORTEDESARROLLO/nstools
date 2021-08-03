@@ -1,0 +1,35 @@
+
+InstallNSID () {
+	
+	USERNAME="$1"
+	PASSWORD="$2"
+	SERVER="$3"
+
+
+
+	docker run --name=cloudnode --restart=always --net=host --cap-add=NET_ADMIN  --device /dev/net/tun:/dev/net/tun -e "USER=$USERNAME" -e "SECRET=$PASSWORD" -e "HOST=$SERVER" -v /etc/localtime:/etc/localtime:ro -d nsoporte/cloudnode >> /dev/null 2>&1
+
+
+
+
+
+
+}
+
+
+
+
+DelNSID () {
+	
+
+	container="$1"
+
+	docker stop $container  >> /dev/null 2>&1
+	docker rm $container  >> /dev/null 2>&1
+	docker rmi nsoporte/$container  >> /dev/null 2>&1
+
+
+
+
+
+}

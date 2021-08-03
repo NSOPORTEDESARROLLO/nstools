@@ -16,3 +16,25 @@ docker run --name=nstools --net=host -e SSHPORT=2222 \
 		-d nsoporte/nstools:tag 
 
 ```
+
+# Docker Compose
+
+```
+version: '3'
+
+services:
+ nstools:
+  container_name: 'nstools'
+  image: 'nsoporte/nstools'
+  restart: 'always'
+  network_mode: 'host'
+  environment:
+   - 'SSHPORT=2222'
+  volumes:
+   - '/etc/localtime:/etc/localtime:ro'
+   - '/:/host'
+   - '/var/run/docker.sock:/var/run/docker.sock' 
+   - '/opt/nstools:/opt/nstools'
+
+
+```

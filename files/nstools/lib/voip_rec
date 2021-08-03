@@ -1,0 +1,21 @@
+VoipRec () {
+	
+	ACTION=$1
+	FILENAME=$2
+	DAYS=$3
+
+
+
+	if [ $ACTION -eq 1 ];then
+
+		echo "30 11 * * * root /usr/bin/find /var/spool/asterisk/monitor -type f -mtime +$DAYS -delete" > $FILENAME
+		chmod 644 $FILENAME
+
+	else
+
+		rm -f $FILENAME
+	fi
+
+	chroot /host  /usr/bin/systemctl restart crond
+
+}
