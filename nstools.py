@@ -3,6 +3,22 @@ import os
 import time
 
 
+def create_file(file_name:str, text:str) -> bool:
+    '''
+        Crea un archivo de texto con el contenido que se le ha pasado 
+    '''
+
+    f = open(file_name, "w")
+    f.write(text)
+    f.close()
+
+    if os.path.isfile(file_name):
+        return True
+    else:
+        return False
+
+
+
 def check_file(file_name:str) -> bool:
 
     '''
@@ -23,14 +39,39 @@ def recycle_recordings() -> None :
     print_header("Enable/Disable Recording recycle")
     if check_file(file_name):
         
-        print("Status: Active")
+        with open(file_name) as f:
+            first_line = f.readline().strip('\n')
+        
+        arry_line = first_line.split() 
         
 
+        text = f"\t\tSTATUS: ACTIVE FOR {arry_line[11]} DAYS\n\n\
+        \tEnter D to disable or any key for back main menu\n\n"
+
+        print(text)
+
+        dis = input()
+
+        if dis.upper() == "D":
+            os.remove(file_name)
+         
+
     else:
-        print("Status: No Active")
+        
+        text = "\t\tSTATUS: NO ACTIVE\n\n\
+        \tEnter days to keep or B for back main menu\n\n"
+        
+        
+        print(text)
+        
+        days = input()
 
+        if days.upper() == "B":
+            pass
+        else:
+            file_text = f"30 11 * * * root find /var/spool/asterisk/monitor -type f -mtime +{days} -delete\n"
+            create_file(file_name,file_text)
 
-    time.sleep(6.0)
 
 def print_header(name: str) -> None:
 
