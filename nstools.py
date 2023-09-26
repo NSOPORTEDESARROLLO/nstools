@@ -1,6 +1,57 @@
 
 import os
 import time
+import getpass
+import subprocess
+
+
+
+
+def delete_recordings() -> None:
+
+
+    print_header("Delete Recordings")
+
+    text = f"\t\tEnter number of days to delete or B for back to main menu\n\n"
+    print(text)
+    opt = input()
+
+    #load_file_list(120,"/var/spool/asterisk/monitor")
+
+  
+def RunCommand(pcmd:str) -> str:
+    '''
+        Ejecuta un comando y devuelve la salida y codigo
+    '''
+    output_raw = subprocess.Popen(pcmd,stdout=subprocess.PIPE,shell=True)
+    output_code = output_raw.wait()
+    output_result,err = output_raw.communicate()
+    a = output_result.decode('utf-8')
+    output = a.strip()
+    return output,output_code
+
+
+
+
+
+def load_file_list(days:int, path:str) -> list:
+
+    '''
+        Recibe un entero con los dias que de deben conservar, 
+        junto con el path, este devuelve una lista con los archivos
+    '''
+
+    cmd = f"find {path} -type f -mtime +{days}"
+    result,code = RunCommand(cmd)
+
+    print (result)
+    input()
+
+
+
+
+
+
 
 
 def create_file(file_name:str, text:str) -> bool:
@@ -80,7 +131,7 @@ def print_header(name: str) -> None:
     
     '''
 
-
+    os.system('clear')
     header="\t\t###########################################################\n\
                 #                                                         #\n\
                 #           NSTOOLS                                       #\n\
@@ -125,7 +176,7 @@ def print_main_menu() -> None:
         recycle_recordings()
 
     elif opt == "2":
-        pass    
+        delete_recordings()    
 
     elif opt == "3":
         pass
@@ -143,9 +194,13 @@ def print_main_menu() -> None:
 
 if __name__ == '__main__':
     
-    while True:
-        print_main_menu()
     
+    if getpass.getuser() == "root":
+        while True:
+            print_main_menu()
+    
+    else:
+        print ("ERROR: NSTOOLS must run as root user")
 
 
     
