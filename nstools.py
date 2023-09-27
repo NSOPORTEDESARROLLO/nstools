@@ -9,6 +9,12 @@ import subprocess
 
 
 
+
+
+
+
+
+
 def delete_recordings() -> None:
 
 
@@ -18,7 +24,18 @@ def delete_recordings() -> None:
     print(text)
     opt = input()
 
-    #load_file_list(120,"/var/spool/asterisk/monitor")
+    if opt.upper() != "B":
+
+        
+        cmd = f"find /var/spool/asterisk/monitor -type f -mtime +{opt} |wc -l"
+
+        result,code = RunCommand(cmd)
+
+        print (f"\t\tAre you sure delete {result} files?  Y / N \n\n")
+        conf = input()
+        if conf.upper() == "Y":
+            cmd2 = f"find /var/spool/asterisk/monitor -type f -mtime +{opt} -delete"
+            RunCommand(cmd2)
 
   
 def RunCommand(pcmd:str) -> str:
@@ -31,27 +48,6 @@ def RunCommand(pcmd:str) -> str:
     a = output_result.decode('utf-8')
     output = a.strip()
     return output,output_code
-
-
-
-
-
-def load_file_list(days:int, path:str) -> list:
-
-    '''
-        Recibe un entero con los dias que de deben conservar, 
-        junto con el path, este devuelve una lista con los archivos
-    '''
-
-    cmd = f"find {path} -type f -mtime +{days}"
-    result,code = RunCommand(cmd)
-
-    print (result)
-    input()
-
-
-
-
 
 
 
@@ -136,7 +132,7 @@ def print_header(name: str) -> None:
     os.system('clear')
     header="\t\t###########################################################\n\
                 #                                                         #\n\
-                #           NSTOOLS                                       #\n\
+                #           NSTOOLS  v0.1                                 #\n\
                 #                      Christopher Naranjo G.             #\n\
                 #                         <cnaranjo@nsoporte.com>         #\n\
                 #                                                         #\n\
@@ -164,7 +160,7 @@ def print_main_menu() -> None:
                     \t\t1- Enable/Disable Recording recycle\n\
                     \t\t2- Delete Recordings by time\n\
                     \t\t3- Wipe Logs\n\n\
-                    \t\tS- Exit\n\n\n\
+                    \t\tQ- Quit\n\n\n\
                     Please Select an Option:\n" 
     
     
@@ -180,10 +176,10 @@ def print_main_menu() -> None:
     elif opt == "2":
         delete_recordings()    
 
-    elif opt == "3":
-        pass
+    #elif opt == "3":
+    #    pass
 
-    elif opt.upper() == "S":
+    elif opt.upper() == "Q":
         
         exit()    
 
