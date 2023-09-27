@@ -14,6 +14,7 @@ Si no genera error se puede continuar con la instalacion
 
 
 ```
+yum install gcc python3-devel
 pip3 install psutil
 wget https://github.com/NSOPORTEDESARROLLO/nstools/raw/main/nstools.py -O /usr/sbin/nstools && chmod +x /usr/sbin/nstools
 
