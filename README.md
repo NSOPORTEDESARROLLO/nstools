@@ -14,6 +14,7 @@ Si no genera error se puede continuar con la instalacion
 
 
 ```
+pip3 install psutil
 wget https://github.com/NSOPORTEDESARROLLO/nstools/raw/main/nstools.py -O /usr/sbin/nstools && chmod +x /usr/sbin/nstools
 
 ```
@@ -21,3 +22,6 @@ wget https://github.com/NSOPORTEDESARROLLO/nstools/raw/main/nstools.py -O /usr/s
 # Funcionalidades
 
 - Reciclado de grabaciones
+- Borrado de grabaciones 
+- Limpieza de logs
+- Reporte de sistema

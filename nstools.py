@@ -5,12 +5,119 @@ import os
 import time
 import getpass
 import subprocess
+import psutil
+
+
+def system_report() -> None:
+
+    print_header("System Report")
+    get_mounts_info()
+    get_resources_info()
+
+    print("\n\n\t\tPress any key to back main menu\n\n")
+    input()
+
+
+def get_mounts_info() -> None:
+
+    
+    cmd = "mount -v |grep -v 'docker' |grep '/dev/' |awk '{print $3}'"
+    result,code = RunCommand(cmd)
+
+    mounts = result.split("\n")
+    print(f"\t\t##################### PARTITIONS ##########################\n\n")
+    for mount in mounts:
+        a = RunCommand(f"df -h {mount}")
+        print(a[0] + "\n")
+
+
+def get_resources_info() -> None:
+
+    print(f"\t\t##################### RESOURSES ##########################\n\n")
+    load1, load5, load15 = psutil.getloadavg()
+    cpu_usage = (load15/os.cpu_count()) * 100
+ 
+    print("The CPU usage is : ", round(cpu_usage,2))
+    print('RAM memory % used:', psutil.virtual_memory()[2])
 
 
 
 
 
+def readfile(file:str) -> list:
 
+    '''
+        lee un archivo de texto y mete en una lista linea por linea
+    '''
+    lines = []
+    # Using readline()
+    file1 = open(file, 'r')
+    count = 0
+    while True:
+        count += 1
+ 
+        # Get next line from file
+        line = file1.readline()
+ 
+        # if line is empty
+        # end of file is reached
+        if not line:
+            break
+        lines.append(line)
+ 
+    file1.close()
+    return lines
+
+
+def wipe_logs() -> None:
+    '''
+        Borrar logs archivados y limpia logs actuales  
+    
+    '''
+    files = [ '/var/log/asterisk/messages',
+             '/var/log/asterisk/full',
+             '/var/log/asterisk/issabelpbx.log',
+             '/var/log/asterisk/queue_log',
+             '/var/log/asterisk/issabelpbx_dbug',
+             '/opt/issabel/dialer/dialerd.log',
+             '/var/log/fail2ban.log'
+
+             ]
+    
+    deep_files = ['/var/log/asterisk/cdr-csv/Master.csv',
+                  ]
+    
+    patters = ['/var/log/asterisk/full-*',
+               '/var/log/asterisk/messages-*',
+               '/opt/issabel/dialer/dialerd.log-*',
+               '/var/log/fail2ban.log-*',
+               '/var/log/boot.log-*',
+               '/var/log/cron-*',
+               '/var/log/maillog-*',
+               '/var/log/messages-*',
+               '/var/log/secure-*',
+               '/var/log/spooler-*',
+               '/var/log/yum.log-*']
+
+
+    print_header("Wipe Logs")
+    text = f"\t\tDo you want to wipe logs? Y(Yes) | N(No) | A(All)\n\n"
+    print(text)
+    opt =  input()
+
+    if opt.upper() == "Y" or opt.upper() == "A":
+        #Limpia los archivos
+        for file in files:
+            RunCommand(f"truncate -s 0 {file}")
+
+        #Borra archivados
+        for patter in patters:
+            RunCommand(f"rm -f {patter}")
+
+        if opt.upper() == "A":
+            #Borra archivos opcionales
+            for deep_file in deep_files:
+                RunCommand(f"truncate -s 0 {deep_file}")
 
 
 
@@ -132,7 +239,7 @@ def print_header(name: str) -> None:
     os.system('clear')
     header="\t\t###########################################################\n\
                 #                                                         #\n\
-                #           NSTOOLS  v0.1                                 #\n\
+                #           NSTOOLS  v0.2                                 #\n\
                 #                      Christopher Naranjo G.             #\n\
                 #                         <cnaranjo@nsoporte.com>         #\n\
                 #                                                         #\n\
@@ -159,7 +266,8 @@ def print_main_menu() -> None:
     menu_str =      "\
                     \t\t1- Enable/Disable Recording recycle\n\
                     \t\t2- Delete Recordings by time\n\
-                    \t\t3- Wipe Logs\n\n\
+                    \t\t3- Wipe Logs\n\
+                    \t\t4- System Report\n\n\
                     \t\tQ- Quit\n\n\n\
                     Please Select an Option:\n" 
     
@@ -176,8 +284,11 @@ def print_main_menu() -> None:
     elif opt == "2":
         delete_recordings()    
 
-    #elif opt == "3":
-    #    pass
+    elif opt == "3":
+        wipe_logs()
+
+    elif opt == "4":
+        system_report()
 
     elif opt.upper() == "Q":
         
